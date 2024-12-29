@@ -1,3 +1,4 @@
+'use server'
 //!Node appwrite decay so all of the services will be used on server side
 
 import {Account, AppwriteException, Avatars, Client, Databases, Messaging, Storage} from "node-appwrite";
@@ -7,7 +8,8 @@ import { get } from "http";
 
 export const createSessionClient = async () =>{
     const client  = new Client().setEndpoint(appWriteConfig.endpointUrl).setProject(appWriteConfig.projectId);
-    const session = (await cookies()).get(args: 'appwrite-session');
+    const session = (await cookies()).get('appwrite-session');
+    // const session = (await cookies()).get(args: 'appwrite-session');
 
     if (!session || !session.value) throw new Error("No session")
 
@@ -27,7 +29,7 @@ export const createSessionClient = async () =>{
 //!Admin level client
 export const createAdminClient = async () =>{
     //create admin level permissions like managing databases etc
-    const client  = new Client().setEndpoint(appWriteConfig.endpointUrl).setProject(appWriteConfig.projectId).setKey(appWriteConfig.sec);
+    const client  = new Client().setEndpoint(appWriteConfig.endpointUrl).setProject(appWriteConfig.projectId).setKey(appWriteConfig.secretKey);
     
     return{
         get account(){

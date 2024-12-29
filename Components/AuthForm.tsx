@@ -10,6 +10,7 @@ import {  Form,  FormControl,  FormDescription,  FormField,  FormItem,  FormLabe
 import { Input } from "@/Components/ui/input";
 import SignIn from "@/app/(auth)/sign-in/page";
 import Link from "next/link";
+import { createAccount } from "@/lib/actions/user.actions";
 
 type FormType = "sign-in" | "sign-up";
 
@@ -25,6 +26,8 @@ const AuthForm = ({ type }: { type: FormType }) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [accountId, setAccountId] = useState(null)
+
 
   const formSchema = authFormSchema(type);
   // 1. Define your form.
@@ -37,7 +40,21 @@ const AuthForm = ({ type }: { type: FormType }) => {
 
   // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    setIsLoading(true);
+    
+    try {
+      const user = await createAccount({fullName: values.fullName || '', email: values.email});
+      setAccountId(user.accountId);
+    
+    } catch (error) {
+      
+      setErrorMessage('failed to create account');
+    
+    }finally{
+
+      setIsLoading(false);
+    }
+
   };
 
   return (
