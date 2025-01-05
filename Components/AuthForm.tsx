@@ -11,6 +11,7 @@ import { Input } from "@/Components/ui/input";
 import SignIn from "@/app/(auth)/sign-in/page";
 import Link from "next/link";
 import { createAccount } from "@/lib/actions/user.actions";
+import OTPModal from "./OTPModal";
 
 type FormType = "sign-in" | "sign-up";
 
@@ -86,43 +87,60 @@ const AuthForm = ({ type }: { type: FormType }) => {
             />
           )}
           <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="shad-form-item">
-                    <FormLabel className="shad-form-label">
-                      Email{" "}
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter your email"
-                        className="shad-input"
-                        {...field}
-                      />
-                    </FormControl>
-                  </div>
-                  <FormMessage className="shad-form-message" />
-                </FormItem>
-              )}
-            />
-          <Button type="submit" className="form-submit-button" disabled = {isLoading  }>{type === "sign-in" ? "Sign In" : "Sign Up"}
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <div className="shad-form-item">
+                  <FormLabel className="shad-form-label">Email </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter your email"
+                      className="shad-input"
+                      {...field}
+                    />
+                  </FormControl>
+                </div>
+                <FormMessage className="shad-form-message" />
+              </FormItem>
+            )}
+          />
+          <Button
+            type="submit"
+            className="form-submit-button"
+            disabled={isLoading}
+          >
+            {type === "sign-in" ? "Sign In" : "Sign Up"}
             {isLoading && (
-              <img src="./assets/icons/loader.svg" alt="loader" width={24} height={24} className="ml-2 animate-spin" />
+              <img
+                src="./assets/icons/loader.svg"
+                alt="loader"
+                width={24}
+                height={24}
+                className="ml-2 animate-spin"
+              />
             )}
           </Button>
-          {errorMessage &&(<p className="error-message">*{errorMessage}</p>)}
+          {errorMessage && <p className="error-message">*{errorMessage}</p>}
           <div className="body-2 flex justify-center">
             <p className="text-light-100">
-              {type === "sign-in" ?"Dont have an account" : "Already have an account"}
+              {type === "sign-in"
+                ? "Dont have an account"
+                : "Already have an account"}
             </p>
-            <Link href={ type === "sign-in" ? "/sign-up" : "/sign-in"} className="ml-1 font-medium text-brand">
+            <Link
+              href={type === "sign-in" ? "/sign-up" : "/sign-in"}
+              className="ml-1 font-medium text-brand"
+            >
               {" "}
               {type === "sign-in" ? "Sign Up" : "Sign In"}
             </Link>
           </div>
         </form>
       </Form>
+      {true && (
+        <OTPModal email={form.getValues("email")} accountId={accountId} />
+      )}
     </>
   );
 };
